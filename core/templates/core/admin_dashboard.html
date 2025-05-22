@@ -1,0 +1,164 @@
+{% extends "core/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<style>
+  .dashboard-welcome {
+    margin-bottom: 2rem;
+  }
+  .dashboard-welcome h1 {
+    font-size: 2.5rem;
+    color: #2f4f2f;
+  }
+  .dashboard-nav a {
+    margin-right: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .dashboard-nav a:hover {
+    color: #6fae3b;
+  }
+
+  .dashboard-forms {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .form-section {
+    flex: 1 1 400px;
+    background: #f3f9f3;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgb(74 124 47 / 0.3);
+  }
+  .form-section h2 {
+    margin-bottom: 1rem;
+    color: #3b6a1a;
+  }
+  .dashboard-form button.btn-primary {
+    background-color: #4a7c2f;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .dashboard-form button.btn-primary:hover {
+    background-color: #6fae3b;
+  }
+
+  .reports-archive h2 {
+    color: #2f4f2f;
+    margin-bottom: 1rem;
+  }
+  .reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-family: Arial, sans-serif;
+  }
+  .reports-table th,
+  .reports-table td {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .reports-table th {
+    background-color: #4a7c2f;
+    color: white;
+  }
+  .reports-table tbody tr:nth-child(even) {
+    background-color: #f7f9f7;
+  }
+  .link-secondary {
+    color: #4a7c2f;
+    text-decoration: none;
+  }
+  .link-secondary:hover {
+    text-decoration: underline;
+  }
+  .text-muted {
+    color: #888;
+    font-style: italic;
+  }
+</style>
+
+<section class="dashboard-welcome">
+    <h1>Welcome, {{ user.username }}</h1>
+    <nav class="dashboard-nav">
+        <a href="{% url 'events' %}">Events</a>
+        <a href="{% url 'schedules' %}">Schedules</a>
+        <a href="{% url 'volunteers' %}">Volunteers</a>
+    </nav>
+</section>
+
+<section class="dashboard-forms">
+    <article class="form-section">
+        <h2>Add New Event (Clean-up Drive)</h2>
+        <form method="post" class="dashboard-form">
+            {% csrf_token %}
+            {{ event_form.as_p }}
+            <button type="submit" name="submit_event" class="btn btn-primary">Add Event</button>
+        </form>
+    </article>
+
+    <article class="form-section">
+        <h2>Add New Schedule (Garbage Collection)</h2>
+        <form method="post" class="dashboard-form">
+            {% csrf_token %}
+            {{ schedule_form.as_p }}
+            <button type="submit" name="submit_schedule" class="btn btn-primary">Add Schedule</button>
+        </form>
+    </article>
+</section>
+
+<section id="reports" class="reports-archive">
+    <h2>Reports Archive</h2>
+
+    {% if reports %}
+        <table class="reports-table">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date Uploaded</th>
+                    <th>Summary</th>
+                    <th>Photos</th>
+                    <th>PDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report.event.title }}</td>
+                    <td>{{ report.date_uploaded|date:"M d, Y H:i" }}</td>
+                    <td>{{ report.summary|linebreaksbr }}</td>
+                    <td>
+                        {% if report.photos %}
+                            <a href="{{ report.photos.url }}" target="_blank" class="link-secondary">View Photos</a>
+                        {% else %}
+                            <span class="text-muted">No photos</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if report.report_pdf %}
+                            <a href="{{ report.report_pdf.url }}" target="_blank" class="link-secondary">Download PDF</a>
+                        {% else %}
+                            <span class="text-muted">No PDF</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-muted">No reports uploaded yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

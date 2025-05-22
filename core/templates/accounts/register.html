@@ -1,0 +1,167 @@
+{% extends "core/base.html" %}
+
+{% block title %}Register - Eco Bantay{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="register-card">
+    <h2>Register</h2>
+
+    <form method="post" class="register-form" novalidate>
+      {% csrf_token %}
+      
+      {% if form.non_field_errors %}
+        <div class="error-message">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label for="id_username">Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <div class="field-error">{{ form.username.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_password1">Password</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+          <div class="field-error">{{ form.password1.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="id_password2">Confirm Password</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+          <div class="field-error">{{ form.password2.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn-primary">Register</button>
+    </form>
+
+    <p class="back-link">
+      <a href="javascript:history.back()">&larr; Back</a>
+    </p>
+  </div>
+</div>
+
+<style>
+  .container {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 0 20px;
+  }
+
+  .register-card {
+    background: #fff;
+    padding: 32px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #2e4e1d;
+    border-left: 6px solid #81c784;
+    padding-left: 14px;
+    text-align: left;
+  }
+
+  form.register-form {
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: 22px;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fafafa;
+    transition: border-color 0.3s ease;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: #66bb6a;
+    outline: none;
+  }
+
+  .btn-primary {
+    width: 100%;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 14px 0;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #388e3c;
+  }
+
+  .error-message {
+    background-color: #ffe6e6;
+    color: #d32f2f;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .field-error {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 6px;
+  }
+
+  .back-link {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .back-link a {
+    color: #4caf50;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      margin: 40px 15px;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      padding-left: 10px;
+    }
+  }
+</style>
+{% endblock %}

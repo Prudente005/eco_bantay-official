@@ -1,0 +1,350 @@
+{% extends "core/base.html" %}
+
+{% block title %}Clean-up Events{% endblock %}
+
+{% block content %}
+<style>
+  h2 {
+    font-size: 2.4rem;
+    color: #2e4e1d;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    border-left: 6px solid #8cc63f;
+    padding-left: 14px;
+  }
+
+  .message {
+    background-color: #e6f4e6;
+    color: #2e7d32;
+    padding: 12px 18px;
+    border-left: 5px solid #4caf50;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+  }
+
+  .event-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border-left: 6px solid #76b852;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s;
+  }
+
+  .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .event-card h3 {
+    font-size: 1.4rem;
+    color: #2d422f;
+    margin-bottom: 10px;
+  }
+
+  .event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  .event-meta span {
+    display: inline-block;
+  }
+
+  .badge {
+    padding: 4px 10px;
+    background-color: #c8e6c9;
+    color: #256029;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  .event-desc {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+  .event-actions {
+    margin-top: 15px;
+  }
+
+  .event-actions a,
+  .event-actions button {
+    display: inline-block;
+    margin: 6px 10px 0 0;
+    padding: 9px 14px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.3s ease;
+  }
+
+  .event-actions a {
+    background-color: #4caf50;
+    color: #fff;
+  }
+
+  .event-actions a:hover {
+    background-color: #43a047;
+  }
+
+  .event-actions .delete-link {
+    background-color: #e53935;
+  }
+
+  .event-actions .delete-link:hover {
+    background-color: #c62828;
+  }
+
+  .event-actions form {
+    display: inline;
+  }
+
+  .event-actions button[type="submit"] {
+    background-color: #43a047;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .event-actions button[type="submit"]:hover {
+    background-color: #388e3c;
+  }
+
+  .event-actions button[disabled] {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+
+  .text-muted {
+    font-style: italic;
+    color: #666;
+    margin-top: 20px;
+  }
+
+  .btn-back {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-back:hover {
+    background-color: #66bb6a;
+  }
+
+  @media (max-width: 768px) {
+    .event-meta {
+      flex-direction: column;
+    }
+
+    .event-actions a,
+    .event-actions button {
+      font-size: 0.85rem;
+      padding: 7px 12px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-title {
+    color: #2e4e1d;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-text {
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .btn-confirm {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .btn-cancel {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .btn-confirm:hover {
+    background-color: #f4511e;
+  }
+
+  .btn-cancel:hover {
+    background-color: #d5d5d5;
+  }
+
+  .joined-badge {
+    display: inline-block;
+    background-color: #81c784;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  .btn-unjoin {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-unjoin:hover {
+    background-color: #f4511e;
+    transform: translateY(-2px);
+  }
+</style>
+
+<h2>Clean-up Drives</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="message">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+{% if events %}
+  {% for event in events %}
+    <div class="event-card">
+      <h3>{{ event.title }}</h3>
+      <div class="event-meta">
+        <span><strong>Date:</strong> <span class="badge">{{ event.date|date:"M d, Y" }}</span></span>
+        <span><strong>Location:</strong> {{ event.location }}</span>
+      </div>
+      <p class="event-desc">{{ event.description }}</p>
+
+      <div class="event-actions">
+        {% if request.user.is_staff %}
+          <a href="{% url 'edit_event' event.id %}">Edit</a>
+          <a href="{% url 'delete_event' event.id %}" class="delete-link" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+        {% else %}
+          {% if event.id in joined_event_ids %}
+            <span class="joined-badge"><i class="fas fa-check"></i> Joined</span>
+            <button type="button" class="btn-unjoin" onclick="showUnjoinConfirmation('{{ event.id }}', '{{ event.title|escapejs }}')">
+              <i class="fas fa-times"></i> Unjoin Event
+            </button>
+          {% else %}
+            <form method="post" style="display: inline;">
+              {% csrf_token %}
+              <input type="hidden" name="event_id" value="{{ event.id }}">
+              <input type="hidden" name="action" value="join">
+              <button type="submit" class="event-actions button">
+                <i class="fas fa-plus"></i> Join Now
+              </button>
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="text-muted">No clean-up events available at the moment. Please check back later!</p>
+{% endif %}
+
+<a href="javascript:history.back()" class="btn-back">Go Back</a>
+
+<!-- Confirmation Modal -->
+<div id="unjoinModal" class="modal">
+  <div class="modal-content">
+    <h3 class="modal-title">Confirm Unjoin</h3>
+    <p class="modal-text">Are you sure you want to unjoin from this event?</p>
+    <p id="eventName" class="modal-text" style="font-weight: bold;"></p>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="hideUnjoinConfirmation()">Cancel</button>
+      <form id="unjoinForm" method="post" style="display: inline;">
+        {% csrf_token %}
+        <input type="hidden" name="event_id" id="unjoinEventId">
+        <input type="hidden" name="action" value="unjoin">
+        <button type="submit" class="btn-confirm">Yes, Unjoin</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function showUnjoinConfirmation(eventId, eventTitle) {
+  document.getElementById('unjoinEventId').value = eventId;
+  document.getElementById('eventName').textContent = eventTitle;
+  document.getElementById('unjoinModal').classList.add('show');
+}
+
+function hideUnjoinConfirmation() {
+  document.getElementById('unjoinModal').classList.remove('show');
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  var modal = document.getElementById('unjoinModal');
+  if (event.target == modal) {
+    hideUnjoinConfirmation();
+  }
+}
+</script>
+{% endblock %}

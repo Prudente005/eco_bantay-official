@@ -1,0 +1,328 @@
+{% extends "core/base.html" %}
+
+{% block title %}Upload Environmental Report{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="upload-card">
+    <div class="eco-icon">
+      <i class="fas fa-leaf"></i>
+    </div>
+    <h2>Environmental Report</h2>
+    <p class="subtitle">Help us track and improve our community's environmental impact</p>
+
+    <form method="post" enctype="multipart/form-data" class="upload-form" novalidate>
+      {% csrf_token %}
+      
+      {% if form.non_field_errors %}
+        <div class="error-message">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+      
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          <div class="input-wrapper">
+            {{ field }}
+            {% if field.name == 'file' %}
+              <div class="file-info">
+                <i class="fas fa-file-upload"></i>
+                <span>Choose a file or drag it here</span>
+              </div>
+            {% endif %}
+          </div>
+          {% if field.errors %}
+            <div class="field-error">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ field.errors }}
+            </div>
+          {% endif %}
+          {% if field.help_text %}
+            <div class="help-text">
+              <i class="fas fa-info-circle"></i>
+              {{ field.help_text }}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      
+      <button type="submit" class="btn-primary">
+        <i class="fas fa-cloud-upload-alt"></i>
+        Submit Report
+      </button>
+    </form>
+
+    <p class="back-link">
+      <a href="{% url 'resident_dashboard' %}">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+      </a>
+    </p>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 40px auto;
+    padding: 0 20px;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .upload-card {
+    background: linear-gradient(145deg, #ffffff, #f8faf8);
+    padding: 40px 32px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(46, 78, 29, 0.12);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .upload-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #4caf50, #81c784);
+  }
+
+  .eco-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .eco-icon i {
+    font-size: 36px;
+    color: white;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #2e4e1d;
+    text-align: center;
+    font-family: 'Merriweather', serif;
+  }
+
+  .subtitle {
+    color: #666;
+    margin-bottom: 32px;
+    font-size: 1.1rem;
+  }
+
+  form.upload-form {
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: #2e4e1d;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  input[type="file"],
+  input[type="text"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #ffffff;
+    transition: all 0.3s ease;
+  }
+
+  input[type="file"] {
+    padding: 60px 16px 16px;
+    cursor: pointer;
+  }
+
+  .file-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .file-info i {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #4caf50;
+    display: block;
+  }
+
+  input[type="file"]:focus,
+  input[type="text"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+    outline: none;
+  }
+
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    color: white;
+    border: none;
+    padding: 16px 0;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #388e3c, #66bb6a);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  }
+
+  .error-message {
+    background-color: #fff2f2;
+    color: #d32f2f;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 4px solid #d32f2f;
+  }
+
+  .field-error {
+    color: #d32f2f;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .help-text {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .back-link {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .back-link a {
+    color: #2e4e1d;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .back-link a:hover {
+    background: rgba(76, 175, 80, 0.1);
+    transform: translateX(-4px);
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      margin: 20px 15px;
+    }
+
+    .upload-card {
+      padding: 32px 20px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    .eco-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .eco-icon i {
+      font-size: 28px;
+    }
+  }
+</style>
+
+<script>
+  // Add visual feedback for file selection
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    
+    fileInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        const fileInfo = this.parentElement.querySelector('.file-info');
+        if (this.files.length > 0) {
+          fileInfo.innerHTML = `
+            <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+            <span>${this.files[0].name}</span>
+          `;
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

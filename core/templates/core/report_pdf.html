@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report PDF</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { text-align: center; }
+        .content { margin: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Report for Event: {{ report.event.title }}</h1>
+    <p><strong>Uploaded by:</strong> {{ report.user.username }}</p>
+    <p><strong>Date Uploaded:</strong> {{ report.date_uploaded }}</p>
+    <hr>
+    <p><strong>Summary:</strong></p>
+    <p>{{ report.summary }}</p>
+</body>
+</html>

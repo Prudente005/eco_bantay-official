@@ -1,0 +1,114 @@
+{% extends "core/base.html" %}
+
+{% block title %}Volunteers{% endblock %}
+
+{% block content %}
+<style>
+  h2 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    color: #2e4e1d;
+    font-weight: 700;
+    border-left: 5px solid #7bbf3a;
+    padding-left: 10px;
+  }
+
+  .volunteers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .volunteers-table thead {
+    background-color: #4a7c2f;
+    color: #fff;
+  }
+
+  .volunteers-table th,
+  .volunteers-table td {
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  .volunteers-table tbody tr:nth-child(even) {
+    background-color: #f3fdf3;
+  }
+
+  .volunteers-table tbody tr:hover {
+    background-color: #e4f9e4;
+    transition: 0.3s ease;
+  }
+
+  .text-muted {
+    color: #777;
+    font-style: italic;
+    margin-top: 20px;
+  }
+
+  .btn-back {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 18px;
+    background-color: #4a7c2f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .btn-back:hover {
+    background-color: #6fae3b;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .volunteers-table th,
+    .volunteers-table td {
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    .btn-back {
+      padding: 8px 14px;
+      font-size: 14px;
+    }
+  }
+</style>
+
+<h2>Volunteers</h2>
+
+{% if volunteers %}
+    <table class="volunteers-table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Event</th>
+                <th>Joined Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for volunteer in volunteers %}
+            <tr>
+                <td>{{ volunteer.user.username }}</td>
+                <td>{{ volunteer.event.title }}</td>
+                <td>{{ volunteer.joined_date|date:"M d, Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-muted">No volunteers yet.</p>
+{% endif %}
+
+<a href="javascript:history.back()" class="btn-back">← Back</a>
+
+{% endblock %}

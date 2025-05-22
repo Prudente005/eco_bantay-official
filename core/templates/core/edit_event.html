@@ -1,0 +1,120 @@
+{% extends "core/base.html" %}
+
+{% block title %}Edit Clean-up Drive{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="form-card">
+    <h2>Edit Clean-up Drive</h2>
+    <form method="post" class="edit-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Save Changes</button>
+        <a href="{% url 'events' %}" class="btn-secondary">Back to Events</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .form-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: #2e4e1d;
+    font-weight: 700;
+    border-left: 5px solid #81c784;
+    padding-left: 12px;
+  }
+
+  form.edit-form p {
+    margin-bottom: 20px;
+  }
+
+  form label {
+    font-weight: 600;
+    color: #333;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  form input,
+  form select,
+  form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f9f9f9;
+    transition: border 0.3s;
+  }
+
+  form input:focus,
+  form select:focus,
+  form textarea:focus {
+    border-color: #66bb6a;
+    outline: none;
+  }
+
+  .form-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #388e3c;
+  }
+
+  .btn-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 10px 18px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: #d5d5d5;
+  }
+
+  @media (max-width: 600px) {
+    .form-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+{% endblock %}

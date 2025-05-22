@@ -1,0 +1,271 @@
+{% extends "core/base.html" %}
+
+{% block title %}Welcome to Eco Bantay{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-icon-wrapper">
+      <i class="fas fa-tree"></i>
+      <div class="eco-particles">
+        <i class="fas fa-leaf particle p1"></i>
+        <i class="fas fa-seedling particle p2"></i>
+        <i class="fas fa-leaf particle p3"></i>
+      </div>
+    </div>
+    <h1>Welcome to EcoBantay</h1>
+    <p class="hero-text">Join a dedicated community committed to environmental preservation and sustainable action.</p>
+    <p class="cta-text">Get involved today — make a difference in our environment.</p>
+    
+    <div class="cta-buttons">
+      <a href="{% url 'login' %}" class="btn-primary">
+        <i class="fas fa-sign-in-alt"></i>
+        Log in
+      </a>
+      <a href="{% url 'register' %}" class="btn-secondary">
+        <i class="fas fa-user-plus"></i>
+        Create Account
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="features-section">
+  <div class="feature-card">
+    <div class="feature-icon">
+      <i class="fas fa-hand-holding-heart"></i>
+    </div>
+    <h3>Community Action</h3>
+    <p>Join clean-up drives and environmental initiatives to make a direct impact in your community.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <i class="fas fa-recycle"></i>
+    </div>
+    <h3>Waste Management</h3>
+    <p>Access organized garbage collection schedules and learn proper waste segregation practices.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">
+      <i class="fas fa-users"></i>
+    </div>
+    <h3>Growing Network</h3>
+    <p>Be part of a growing network of environmentally conscious individuals making positive change.</p>
+  </div>
+</div>
+
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes particle-float {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(10px, -10px) rotate(45deg); }
+    50% { transform: translate(0, -20px) rotate(90deg); }
+    75% { transform: translate(-10px, -10px) rotate(45deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  .hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, rgba(46, 78, 29, 0.05), rgba(76, 175, 80, 0.1));
+    border-radius: 20px;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-icon-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+
+  .hero-icon-wrapper i {
+    font-size: 4rem;
+    color: var(--green-mid);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .eco-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .particle {
+    position: absolute;
+    font-size: 1.2rem;
+    color: var(--green-light);
+    opacity: 0.6;
+  }
+
+  .p1 { animation: particle-float 4s infinite; top: 20%; left: 80%; }
+  .p2 { animation: particle-float 5s infinite; top: 60%; left: 20%; }
+  .p3 { animation: particle-float 6s infinite; top: 40%; left: 50%; }
+
+  h1 {
+    font-size: 3.5rem;
+    color: var(--green-dark);
+    margin-bottom: 1.5rem;
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+  }
+
+  .hero-text {
+    font-size: 1.4rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .cta-text {
+    font-size: 1.2rem;
+    color: var(--green-mid);
+    margin-bottom: 2rem;
+    font-weight: 600;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+    color: white;
+    box-shadow: 0 4px 15px rgba(94, 163, 58, 0.3);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--green-dark);
+    border: 2px solid var(--green-mid);
+    box-shadow: 0 4px 15px rgba(94, 163, 58, 0.1);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(94, 163, 58, 0.4);
+  }
+
+  .btn-secondary:hover {
+    background: var(--cream-light);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(94, 163, 58, 0.2);
+  }
+
+  .features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(94, 163, 58, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(94, 163, 58, 0.15);
+  }
+
+  .feature-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  .feature-icon i {
+    font-size: 2rem;
+    color: white;
+  }
+
+  .feature-card h3 {
+    color: var(--green-dark);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .feature-card p {
+    color: var(--text-dark);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-text {
+      font-size: 1.2rem;
+    }
+
+    .cta-text {
+      font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .features-section {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
+{% endblock %}

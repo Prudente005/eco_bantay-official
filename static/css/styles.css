@@ -1,0 +1,97 @@
+/* Dashboard Header */
+.dashboard-welcome h1 {
+    color: #2a5d34; /* deep green */
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+
+.dashboard-nav {
+    margin-bottom: 2em;
+}
+
+.dashboard-nav a {
+    text-decoration: none;
+    color: #4a7c2f; /* medium green */
+    margin-right: 1.5em;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.dashboard-nav a:hover {
+    color: #7db66b; /* lighter green */
+}
+
+/* Forms */
+.dashboard-forms {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.form-section {
+    background: #f0f8f4;
+    padding: 1.5em;
+    border-radius: 10px;
+    flex: 1 1 300px;
+    box-shadow: 0 2px 8px rgba(42, 93, 52, 0.1);
+}
+
+.dashboard-form button.btn-primary {
+    background-color: #4a7c2f;
+    color: white;
+    border: none;
+    padding: 0.6em 1.4em;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-form button.btn-primary:hover {
+    background-color: #7db66b;
+}
+
+/* Reports Table */
+.reports-archive {
+    margin-top: 3em;
+}
+
+.reports-archive h2 {
+    color: #2a5d34;
+    margin-bottom: 1em;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.reports-table thead {
+    background-color: #d9e8d6;
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 0.75em 1em;
+    text-align: left;
+    border-bottom: 1px solid #c8dcc7;
+}
+
+.reports-table tbody tr:hover {
+    background-color: #eaf5e7;
+}
+
+.link-secondary {
+    color: #4a7c2f;
+    text-decoration: underline;
+}
+
+.link-secondary:hover {
+    color: #7db66b;
+}
+
+.text-muted {
+    color: #8a9a84;
+    font-style: italic;
+}

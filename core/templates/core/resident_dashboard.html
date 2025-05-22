@@ -1,0 +1,364 @@
+{% extends "core/base.html" %}
+{% block content %}
+<style>
+  /* Animation for fading in content */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+    .content-wrapper {    animation: fadeInUp 0.6s ease forwards;  }  .dashboard-grid {    display: grid;    grid-template-columns: 1fr 1fr;    gap: 2rem;    margin-top: 2rem;  }  .dashboard-section {    min-width: 0; /* Prevents overflow in grid items */  }  @media (max-width: 1024px) {    .dashboard-grid {      grid-template-columns: 1fr;    }  }  h2 {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 1rem;
+  }
+
+  ul.link-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  ul.link-list li a {
+    background-color: var(--green-mid);
+    color: white;
+    padding: 0.6rem 1.3rem;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(94, 163, 58, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    display: inline-block;
+  }
+
+  ul.link-list li a:hover,
+  ul.link-list li a:focus {
+    background-color: var(--green-light);
+    box-shadow: 0 6px 16px rgba(167, 209, 41, 0.6);
+    transform: scale(1.05);
+    outline: none;
+  }
+
+  .event-card {
+    background: var(--glass-bg);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s ease, transform 0.25s ease;
+  }
+
+  .event-card:hover,
+  .event-card:focus-within {
+    box-shadow: 0 12px 24px rgba(167, 209, 41, 0.6);
+    transform: translateY(-5px);
+    outline: none;
+  }
+
+  .event-card p {
+    margin: 0.3rem 0;
+    color: var(--green-dark);
+  }
+
+  .join-button {
+    background-color: var(--green-mid);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(94, 163, 58, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    margin-top: 0.8rem;
+  }
+
+  .join-button:hover,
+  .join-button:focus {
+    background-color: var(--green-light);
+    box-shadow: 0 6px 16px rgba(167, 209, 41, 0.6);
+    transform: scale(1.05);
+    outline: none;
+  }
+
+  h3 {
+    color: var(--green-mid);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  ul.schedule-list {
+    list-style: none;
+    padding-left: 1rem;
+    color: var(--green-dark);
+  }
+
+  ul.schedule-list li {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  p.no-events {
+    font-style: italic;
+    color: var(--green-dark);
+  }
+
+  .join-button.unjoin {
+    background-color: #ff5722;
+  }
+
+    .join-button.unjoin:hover {    background-color: #f4511e;  }  /* Modal styles */  .modal {    display: none;    position: fixed;    top: 0;    left: 0;    width: 100%;    height: 100%;    background-color: rgba(0, 0, 0, 0.5);    z-index: 1000;    justify-content: center;    align-items: center;  }  .modal.show {    display: flex;  }  .modal-content {    background: white;    padding: 2rem;    border-radius: 12px;    max-width: 400px;    width: 90%;    text-align: center;    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);  }  .modal-title {    color: #2e4e1d;    font-size: 1.5rem;    margin-bottom: 1rem;  }  .modal-text {    color: #555;    margin-bottom: 1.5rem;  }  .modal-buttons {    display: flex;    gap: 1rem;    justify-content: center;  }  .btn-confirm {    background-color: #ff5722;    color: white;    border: none;    padding: 0.8rem 1.5rem;    border-radius: 8px;    cursor: pointer;    font-weight: 600;  }  .btn-cancel {    background-color: #e0e0e0;    color: #333;    border: none;    padding: 0.8rem 1.5rem;    border-radius: 8px;    cursor: pointer;    font-weight: 600;  }  .btn-confirm:hover {    background-color: #f4511e;  }  .btn-cancel:hover {    background-color: #d5d5d5;  }
+
+  /* Calendar styles */
+  .schedule-calendar {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 1rem;
+  }
+
+  .calendar-header {
+    background: #4caf50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .schedule-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .schedule-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+  }
+
+  .schedule-item:last-child {
+    border-bottom: none;
+  }
+
+  .schedule-item:hover {
+    background-color: #f5f9f5;
+  }
+
+  .schedule-date {
+    min-width: 100px;
+    text-align: center;
+    padding-right: 1rem;
+    border-right: 2px solid #4caf50;
+    margin-right: 1rem;
+  }
+
+  .schedule-date .day {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2e4e1d;
+    line-height: 1;
+  }
+
+  .schedule-date .month {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .schedule-info {
+    flex: 1;
+  }
+
+  .waste-type {
+    font-weight: 600;
+    color: #2e4e1d;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .waste-type i {
+    margin-right: 0.5rem;
+    color: #4caf50;
+  }
+
+  .schedule-time {
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .schedule-time i {
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .schedule-address {
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    margin-top: 0.3rem;
+  }
+
+  .schedule-address i {
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    color: #4caf50;
+  }
+
+  .no-schedule {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    background: #f9f9f9;
+  }
+
+  /* Waste type icons */
+  .waste-icon {
+    width: 24px;
+    height: 24px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .schedule-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .schedule-date {
+      border-right: none;
+      border-bottom: 2px solid #4caf50;
+      padding-right: 0;
+      padding-bottom: 0.5rem;
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+      min-width: 100%;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .schedule-date .day {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+<div class="content-wrapper">
+  <h2>Welcome, {{ user.username }}</h2>
+
+    <ul class="link-list">    <li><a href="{% url 'events' %}">View Events</a></li>    <li><a href="{% url 'upload_report' %}">Upload Reports</a></li>  </ul>  <div class="dashboard-grid">    <div class="dashboard-section">      <h3>Upcoming Clean-up Events:</h3>      {% if upcoming_events %}        {% for event in upcoming_events %}          <div class="event-card" tabindex="0">            <p><strong>Event:</strong> {{ event.title }}</p>            <p><strong>Date:</strong> {{ event.date|date:"M d, Y" }}</p>            <p><strong>Location:</strong> {{ event.location }}</p>            {% if event.id in joined_event_ids %}              <button type="button" class="join-button unjoin" onclick="showUnjoinConfirmation('{{ event.id }}', '{{ event.title|escapejs }}')">                <i class="fas fa-times"></i> Unjoin Event              </button>            {% else %}              <form method="post" action="{% url 'events' %}" style="display: inline;">                {% csrf_token %}                <input type="hidden" name="event_id" value="{{ event.id }}">                <input type="hidden" name="action" value="join">                <button type="submit" class="join-button">                  <i class="fas fa-plus"></i> Join as Volunteer                </button>              </form>            {% endif %}          </div>        {% endfor %}      {% else %}        <p class="no-events">No upcoming events.</p>      {% endif %}    </div>    <div class="dashboard-section">      <h3>Garbage Collection Schedule</h3>      <div class="schedule-calendar">
+    <div class="calendar-header">
+      This Week's Collection Schedule
+    </div>
+    {% if weekly_schedules %}
+      <ul class="schedule-list">
+        {% for schedule in weekly_schedules %}
+          <li class="schedule-item">
+            <div class="schedule-date">
+              <div class="day">{{ schedule.date|date:"d" }}</div>
+              <div class="month">{{ schedule.date|date:"M" }}</div>
+            </div>
+            <div class="schedule-info">
+              <div class="waste-type">
+                {% if schedule.waste_type == 'Biodegradable' %}
+                  <div class="waste-icon"><i class="fas fa-leaf"></i></div>
+                {% elif schedule.waste_type == 'Non-biodegradable' %}
+                  <div class="waste-icon"><i class="fas fa-trash"></i></div>
+                {% elif schedule.waste_type == 'Recyclable' %}
+                  <div class="waste-icon"><i class="fas fa-recycle"></i></div>
+                {% else %}
+                  <div class="waste-icon"><i class="fas fa-dumpster"></i></div>
+                {% endif %}
+                {{ schedule.waste_type }}
+              </div>
+              <div class="schedule-time">
+                <i class="fas fa-clock"></i>
+                {{ schedule.start_time|time:"g:i A" }} to {{ schedule.end_time|time:"g:i A" }}
+              </div>
+              <div class="schedule-address">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ schedule.address }}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="no-schedule">
+        <i class="fas fa-calendar-times"></i>
+        <p>No garbage collection scheduled for this week.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if upcoming_schedules %}
+    <div class="schedule-calendar" style="margin-top: 2rem;">
+      <div class="calendar-header">
+        Upcoming Collection Schedule
+      </div>
+      <ul class="schedule-list">
+        {% for schedule in upcoming_schedules %}
+          <li class="schedule-item">
+            <div class="schedule-date">
+              <div class="day">{{ schedule.date|date:"d" }}</div>
+              <div class="month">{{ schedule.date|date:"M" }}</div>
+            </div>
+            <div class="schedule-info">
+              <div class="waste-type">
+                {% if schedule.waste_type == 'Biodegradable' %}
+                  <div class="waste-icon"><i class="fas fa-leaf"></i></div>
+                {% elif schedule.waste_type == 'Non-biodegradable' %}
+                  <div class="waste-icon"><i class="fas fa-trash"></i></div>
+                {% elif schedule.waste_type == 'Recyclable' %}
+                  <div class="waste-icon"><i class="fas fa-recycle"></i></div>
+                {% else %}
+                  <div class="waste-icon"><i class="fas fa-dumpster"></i></div>
+                {% endif %}
+                {{ schedule.waste_type }}
+              </div>
+              <div class="schedule-time">
+                <i class="fas fa-clock"></i>
+                {{ schedule.start_time|time:"g:i A" }} to {{ schedule.end_time|time:"g:i A" }}
+              </div>
+              <div class="schedule-address">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ schedule.address }}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Confirmation Modal --><div id="unjoinModal" class="modal">  <div class="modal-content">    <h3 class="modal-title">Confirm Unjoin</h3>    <p class="modal-text">Are you sure you want to unjoin from this event?</p>    <p id="eventName" class="modal-text" style="font-weight: bold;"></p>    <div class="modal-buttons">      <button class="btn-cancel" onclick="hideUnjoinConfirmation()">Cancel</button>      <form id="unjoinForm" method="post" action="{% url 'events' %}" style="display: inline;">        {% csrf_token %}        <input type="hidden" name="event_id" id="unjoinEventId">        <input type="hidden" name="action" value="unjoin">        <button type="submit" class="btn-confirm">Yes, Unjoin</button>      </form>    </div>  </div></div><script>function showUnjoinConfirmation(eventId, eventTitle) {  document.getElementById('unjoinEventId').value = eventId;  document.getElementById('eventName').textContent = eventTitle;  document.getElementById('unjoinModal').classList.add('show');}function hideUnjoinConfirmation() {  document.getElementById('unjoinModal').classList.remove('show');}// Close modal when clicking outsidewindow.onclick = function(event) {  var modal = document.getElementById('unjoinModal');  if (event.target == modal) {    hideUnjoinConfirmation();  }}</script>{% endblock %}
